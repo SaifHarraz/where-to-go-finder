@@ -4,19 +4,40 @@ A modern, full-featured listing directory application built with React, TypeScri
 
 ## 🚀 Features
 
+### Core Features
 - **Advanced Search & Filters**: Search by keyword, category, price range, and distance
 - **Interactive Map Integration**: Ready for Leaflet/Mapbox integration
-- **Responsive Design**: Mobile-first, pixel-perfect UI matching ListyGo design system
+- **Responsive Design**: Mobile-first, pixel-perfect UI with RTL support
 - **Category Browsing**: Browse listings by 8+ categories
 - **Listing Detail Pages**: Comprehensive information including hours, amenities, contact details
-- **Dashboard**: Admin interface for managing listings, users, and categories
-- **Favorites System**: Save favorite listings (client-side)
 - **Rating & Reviews**: Display ratings and review counts
 - **Contact Form**: Built with react-hook-form and validation
 
+### Authentication & Authorization
+- **User Authentication**: Email/password authentication with Lovable Cloud
+- **Role-Based Access Control**: Three user roles (user, owner, admin)
+- **Protected Routes**: Secure access to owner and admin features
+- **Auto-confirm Email**: Streamlined signup process for testing
+
+### Owner Features
+- **Listing Management**: Create, edit, and delete business listings
+- **Owner Dashboard**: View and manage all your listings
+- **Rich Listing Forms**: Comprehensive forms with validation
+
+### Multilingual Support
+- **English & Arabic**: Full i18n support
+- **RTL Layout**: Automatic right-to-left layout for Arabic
+- **Language Persistence**: Language preference saved in localStorage
+
+### Theme Support
+- **Light/Dark Mode**: Toggle between themes
+- **Theme Persistence**: Theme preference saved in localStorage
+- **Semantic Design Tokens**: Consistent theming across components
+
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 18 + TypeScript
+### Frontend
+- **Framework**: React 18 + TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: Zustand for filters
@@ -26,6 +47,14 @@ A modern, full-featured listing directory application built with React, TypeScri
 - **Icons**: lucide-react
 - **Maps**: Leaflet (react-leaflet)
 - **Animations**: Framer Motion
+- **i18n**: react-i18next
+- **Theme**: next-themes
+
+### Backend (Lovable Cloud)
+- **Database**: PostgreSQL via Supabase
+- **Authentication**: Supabase Auth
+- **Row-Level Security**: Protected database access
+- **Real-time**: Supabase Realtime capabilities
 
 ## 📦 Installation
 
@@ -49,26 +78,29 @@ The app will be available at `http://localhost:8080`
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Environment variables are automatically configured through Lovable Cloud:
 
 ```env
-# Map Configuration (optional - for future map integration)
-VITE_MAPBOX_TOKEN=your_mapbox_token_here
-# OR
-VITE_LEAFLET_TILE_LAYER=https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
-
-# API Configuration (for future backend)
-VITE_API_URL=http://localhost:3000/api
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_key
+VITE_SUPABASE_PROJECT_ID=your_project_id
 ```
 
-### Mock Data
+### Authentication Setup
 
-The application currently uses mock data located in `src/data/mockData.ts`. This includes:
-- 8 sample listings across various categories
-- 2 sample users (admin and regular user)
-- 8 categories
+The app uses Lovable Cloud authentication with the following configuration:
+- **Auto-confirm Email**: Enabled for easier testing
+- **Email Provider**: Configured for email/password auth
+- **Redirect URL**: Set to app origin
 
-To modify or add more mock data, edit this file.
+### User Roles
+
+Three roles are available:
+1. **user**: Default role for all new signups
+2. **owner**: Can create and manage listings (must be assigned manually)
+3. **admin**: Full access to all features (must be assigned manually)
+
+To assign roles, insert into `user_roles` table via backend interface.
 
 ## 📁 Project Structure
 
@@ -76,29 +108,48 @@ To modify or add more mock data, edit this file.
 src/
 ├── components/
 │   ├── layout/
-│   │   ├── Header.tsx          # Main navigation header
-│   │   └── Footer.tsx          # Footer with links
-│   ├── ui/                     # shadcn/ui components
-│   ├── CategoryCard.tsx        # Category display card
-│   ├── ListingCard.tsx         # Listing display card
-│   └── SearchFilters.tsx       # Filter panel component
-├── data/
-│   └── mockData.ts            # Mock listings, categories, users
+│   │   ├── Header.tsx              # Navigation with auth
+│   │   └── Footer.tsx              # Footer component
+│   ├── ui/                         # shadcn/ui components
+│   ├── CategoryCard.tsx            # Category display card
+│   ├── ListingCard.tsx             # Listing display card
+│   ├── SearchFilters.tsx           # Filter panel component
+│   ├── ProtectedRoute.tsx          # Route protection HOC
+│   ├── ThemeProvider.tsx           # Theme context provider
+│   ├── ThemeToggle.tsx             # Dark/light mode toggle
+│   └── LanguageSwitcher.tsx        # Language switcher
+├── contexts/
+│   └── AuthContext.tsx             # Authentication context
 ├── pages/
-│   ├── Home.tsx               # Landing page
-│   ├── Listings.tsx           # Listings grid with filters
-│   ├── ListingDetail.tsx      # Individual listing page
-│   ├── Contact.tsx            # Contact form
-│   ├── Dashboard.tsx          # Admin dashboard
-│   └── NotFound.tsx           # 404 page
+│   ├── Home.tsx                    # Landing page
+│   ├── Listings.tsx                # Listings with filters
+│   ├── ListingDetail.tsx           # Listing details
+│   ├── Contact.tsx                 # Contact form
+│   ├── Dashboard.tsx               # Admin dashboard
+│   ├── NotFound.tsx                # 404 page
+│   ├── auth/
+│   │   ├── SignIn.tsx              # Sign in page
+│   │   ├── SignUp.tsx              # Sign up page
+│   │   └── ForgotPassword.tsx      # Password reset
+│   └── owner/
+│       ├── MyListings.tsx          # Owner's listings
+│       ├── AddListing.tsx          # Create listing
+│       └── EditListing.tsx         # Edit listing
+├── integrations/
+│   └── supabase/
+│       ├── client.ts               # Supabase client
+│       └── types.ts                # Generated types
+├── lib/
+│   ├── i18n.ts                     # i18n configuration
+│   └── utils.ts                    # Utility functions
 ├── store/
-│   └── useFilterStore.ts      # Zustand store for filters
+│   └── useFilterStore.ts           # Filter state
 ├── types/
-│   └── listing.ts             # TypeScript interfaces
+│   └── listing.ts                  # TypeScript interfaces
 ├── utils/
-│   └── distance.ts            # Haversine distance calculation
-├── App.tsx                    # Main app component with routes
-└── index.css                  # Global styles & design system
+│   └── distance.ts                 # Distance calculations
+├── App.tsx                         # Main app with routes
+└── index.css                       # Design system
 ```
 
 ## 🎨 Design System
@@ -126,26 +177,31 @@ The app is ready for map integration. To enable maps:
    - Import CSS: `import 'leaflet/dist/leaflet.css'`
    - Use the MapContainer component from react-leaflet
 
-## 🔌 Backend Integration
+## 🔌 Backend (Lovable Cloud)
 
-Currently using mock data. To integrate with a real backend:
+The app uses Lovable Cloud for full backend functionality:
 
-1. **Mock API Server** (Quick Start):
-   ```bash
-   npm install -g json-server
-   json-server --watch db.json --port 3000
-   ```
+### Database Tables
+- **profiles**: User profile information
+- **user_roles**: Role assignments (user, owner, admin)
+- **categories**: Listing categories
+- **listings**: Business listings with full details
+- **favorites**: User favorite listings
 
-2. **Real Backend**:
-   - Update API endpoints in `src/services/` (create API service files)
-   - Replace mock data imports with React Query hooks
-   - Update types if needed
+### Authentication
+- Email/password authentication
+- Session management
+- Auto-confirm email for testing
+- Protected routes with role checks
 
-3. **Suggested Backend Structure**:
-   - Authentication (JWT or session-based)
-   - REST or GraphQL API
-   - Database (PostgreSQL, MongoDB, etc.)
-   - File storage for listing images
+### Security
+- Row-Level Security (RLS) policies on all tables
+- Role-based access control
+- Secure authentication flows
+- Protected API endpoints
+
+### Accessing Backend
+To view and manage your backend data, use the Lovable Cloud interface in the project settings.
 
 ## 📝 Available Scripts
 
@@ -194,16 +250,18 @@ netlify deploy --prod
 
 ## 🎯 Future Enhancements
 
-- [ ] User authentication and profiles
 - [ ] Real-time map with markers and clustering
-- [ ] Reviews and ratings system
+- [ ] Reviews and ratings system (user-generated)
 - [ ] Booking/reservation system
-- [ ] Image upload for listings
+- [ ] Image upload for listings (file storage)
 - [ ] Advanced search with geolocation
 - [ ] Email notifications
-- [ ] Social sharing
-- [ ] Analytics dashboard
+- [ ] Social sharing integration
+- [ ] Analytics dashboard for owners
 - [ ] Payment integration (Stripe)
+- [ ] Admin panel for category management
+- [ ] Listing approval workflow
+- [ ] Enhanced favorites with collections
 
 ## 📄 License
 
