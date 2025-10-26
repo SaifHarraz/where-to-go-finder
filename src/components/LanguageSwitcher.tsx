@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
           <Globe className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-popover z-50">
         <DropdownMenuItem 
           onClick={() => changeLanguage('en')}
           className={i18n.language === 'en' ? 'bg-muted' : ''}

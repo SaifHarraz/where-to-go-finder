@@ -1,19 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Menu, X, LogOut, Plus } from "lucide-react";
+import { MapPin, Menu, X, Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { UserAvatar } from "@/components/UserAvatar";
+import { SignOutButton } from "@/components/SignOutButton";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,7 +54,7 @@ export function Header() {
           ))}
         </div>
 
-        <div className="hidden md:flex md:items-center md:space-x-2">
+        <div className="hidden md:flex md:items-center md:space-x-2 rtl:space-x-reverse">
           <LanguageSwitcher />
           <ThemeToggle />
           
@@ -68,24 +63,13 @@ export function Header() {
               {isOwner && (
                 <Link to="/owner/add-listing">
                   <Button size="sm">
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" />
                     {t('owner.addNew')}
                   </Button>
                 </Link>
               )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    {user.email}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => signOut()}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    {t('nav.signout')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <UserAvatar user={user} />
+              <SignOutButton />
             </>
           ) : (
             <>
@@ -141,22 +125,18 @@ export function Header() {
                   {isOwner && (
                     <Link to="/owner/add-listing">
                       <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                        <Plus className="mr-2 h-4 w-4" />
+                        <Plus className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" />
                         {t('owner.addNew')}
                       </Button>
                     </Link>
                   )}
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={() => {
-                      signOut();
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    {t('nav.signout')}
-                  </Button>
+                  <div className="flex items-center gap-3 p-3 border rounded-md">
+                    <UserAvatar user={user} />
+                    <div className="flex-1 text-sm">
+                      <p className="font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                      <p className="text-muted-foreground text-xs">{user.email}</p>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <>

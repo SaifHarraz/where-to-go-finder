@@ -95,6 +95,17 @@ const resources = {
       'common.theme': 'Theme',
       'common.light': 'Light',
       'common.dark': 'Dark',
+      'common.view': 'View',
+      
+      // Profile
+      'profile.myFavorites': 'My Favorites',
+      'profile.visitedHistory': 'Visited History',
+      'profile.history': 'History',
+      'profile.noFavorites': 'No favorites yet',
+      'profile.noHistory': 'No visited places yet',
+      'profile.visited': 'Visited',
+      'profile.manageFavorites': 'Manage your favorite places',
+      'profile.startSaving': 'Start exploring and save your favorite places here',
     },
   },
   ar: {
@@ -189,6 +200,17 @@ const resources = {
       'common.theme': 'المظهر',
       'common.light': 'فاتح',
       'common.dark': 'داكن',
+      'common.view': 'عرض',
+      
+      // Profile
+      'profile.myFavorites': 'مفضلاتي',
+      'profile.visitedHistory': 'تاريخ الزيارات',
+      'profile.history': 'السجل',
+      'profile.noFavorites': 'لا توجد مفضلات بعد',
+      'profile.noHistory': 'لا توجد أماكن تمت زيارتها بعد',
+      'profile.visited': 'تمت الزيارة',
+      'profile.manageFavorites': 'إدارة الأماكن المفضلة لديك',
+      'profile.startSaving': 'ابدأ الاستكشاف واحفظ أماكنك المفضلة هنا',
     },
   },
 };

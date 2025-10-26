@@ -11,6 +11,8 @@ import Listings from "./pages/Listings";
 import ListingDetail from "./pages/ListingDetail";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Favorites from "./pages/Favorites";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
@@ -39,6 +41,18 @@ const App = () => (
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              
+              {/* User Routes */}
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/favorites" element={
+                <ProtectedRoute>
+                  <Favorites />
+                </ProtectedRoute>
+              } />
               
               {/* Admin Routes */}
               <Route path="/dashboard" element={
