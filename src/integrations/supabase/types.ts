@@ -93,9 +93,11 @@ export type Database = {
           price: number
           price_label: string | null
           rating: number
+          rejection_reason: string | null
           review_count: number
           slug: string
           state: string
+          status: string | null
           subcategory: string | null
           title: string
           updated_at: string
@@ -123,9 +125,11 @@ export type Database = {
           price?: number
           price_label?: string | null
           rating?: number
+          rejection_reason?: string | null
           review_count?: number
           slug: string
           state: string
+          status?: string | null
           subcategory?: string | null
           title: string
           updated_at?: string
@@ -153,9 +157,11 @@ export type Database = {
           price?: number
           price_label?: string | null
           rating?: number
+          rejection_reason?: string | null
           review_count?: number
           slug?: string
           state?: string
+          status?: string | null
           subcategory?: string | null
           title?: string
           updated_at?: string
