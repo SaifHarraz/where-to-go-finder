@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "Home",
+    "listings": "Listings",
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "signout": "Sign Out",
+    "profile": "Profile",
+    "favorites": "Favorites",
+    "myListings": "My Listings",
+    "addListing": "Add Listing"
+  },
+  "home": {
+    "hero": {
+      "title": "Discover Amazing Places",
+      "subtitle": "Find the best restaurants, cafes, and services in your area"
+    },
+    "categories": {
+      "title": "Browse by Category"
+    },
+    "featured": {
+      "title": "Featured Listings"
+    }
+  },
+  "search": {
+    "placeholder": "Search locations...",
+    "filters": "Filters",
+    "category": "Category",
+    "price": "Price Range",
+    "distance": "Distance",
+    "sortBy": "Sort By",
+    "apply": "Apply Filters",
+    "clear": "Clear All",
+    "results": "results found"
+  },
+  "listing": {
+    "rating": "Rating",
+    "reviews": "reviews",
+    "distance": "km away",
+    "viewDetails": "View Details",
+    "favorite": "Save to Favorites",
+    "share": "Share",
+    "contact": "Contact",
+    "hours": "Opening Hours",
+    "amenities": "Amenities",
+    "gallery": "Gallery",
+    "status": {
+      "pending": "Pending",
+      "active": "Active",
+      "rejected": "Rejected"
+    },
+    "rejectionReason": "Rejection Reason"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember Me",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "resetPassword": "Reset Password",
+    "backToSignIn": "Back to Sign In"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "listings": "Listings",
+    "users": "Users",
+    "categories": "Categories",
+    "addListing": "Add Listing",
+    "editListing": "Edit Listing",
+    "deleteListing": "Delete Listing",
+    "totalListings": "Total Listings",
+    "totalUsers": "Total Users",
+    "totalCategories": "Total Categories"
+  },
+  "admin": {
+    "pendingTab": "Pending",
+    "activeTab": "Active",
+    "rejectedTab": "Rejected",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectReason": "Rejection Reason",
+    "enterReason": "Enter reason for rejection",
+    "approveConfirm": "Are you sure you want to approve this listing?",
+    "rejectConfirm": "Are you sure you want to reject this listing?"
+  },
+  "owner": {
+    "myListings": "My Listings",
+    "addNew": "Add New Listing",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noListings": "No listings yet",
+    "createFirst": "Create your first listing to get started"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us",
+    "name": "Name",
+    "message": "Message",
+    "send": "Send Message"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "submit": "Submit",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "view": "View",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "profile": {
+    "myFavorites": "My Favorites",
+    "visitedHistory": "Visited History",
+    "history": "History",
+    "noFavorites": "No favorites yet",
+    "noHistory": "No visited places yet",
+    "visited": "Visited",
+    "manageFavorites": "Manage your favorite places",
+    "startSaving": "Start exploring and save your favorite places here"
+  },
+  "role": {
+    "admin": "Admin",
+    "owner": "Owner",
+    "user": "User"
+  }
+}

@@ -45,6 +45,8 @@ export const listings: Listing[] = [
     amenities: ["WiFi", "Outdoor Seating", "Reservations", "Parking"],
     isOpen: true,
     isFeatured: true,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-01-15"
   },
   {
@@ -73,6 +75,8 @@ export const listings: Listing[] = [
     amenities: ["Locker Room", "Personal Training", "Group Classes", "Sauna"],
     isOpen: true,
     isFeatured: true,
+    status: "pending",
+    rejectionReason: null,
     createdAt: "2024-01-20"
   },
   {
@@ -102,6 +106,8 @@ export const listings: Listing[] = [
     amenities: ["Pool", "Spa", "Restaurant", "Concierge", "Valet Parking"],
     isOpen: true,
     isFeatured: true,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-01-10"
   },
   {
@@ -131,6 +137,8 @@ export const listings: Listing[] = [
     amenities: ["Gift Shop", "Cafe", "Guided Tours", "Wheelchair Access"],
     isOpen: true,
     isFeatured: false,
+    status: "rejected",
+    rejectionReason: "Incomplete documentation",
     createdAt: "2024-01-25"
   },
   {
@@ -158,6 +166,8 @@ export const listings: Listing[] = [
     amenities: ["WiFi", "Outdoor Seating", "Vegan Options"],
     isOpen: true,
     isFeatured: false,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-02-01"
   },
   {
@@ -187,6 +197,8 @@ export const listings: Listing[] = [
     amenities: ["Insurance Accepted", "Online Booking", "Telemedicine"],
     isOpen: true,
     isFeatured: true,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-01-05"
   },
   {
@@ -215,6 +227,8 @@ export const listings: Listing[] = [
     amenities: ["Personal Styling", "Gift Cards", "Alterations"],
     isOpen: true,
     isFeatured: false,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-02-05"
   },
   {
@@ -242,6 +256,8 @@ export const listings: Listing[] = [
     amenities: ["Custom Orders", "Gluten-Free Options", "Wedding Cakes"],
     isOpen: true,
     isFeatured: true,
+    status: "active",
+    rejectionReason: null,
     createdAt: "2024-01-28"
   }
 ];

@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "listings": "القوائم",
+    "contact": "اتصل بنا",
+    "dashboard": "لوحة التحكم",
+    "signin": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "signout": "تسجيل الخروج",
+    "profile": "الملف الشخصي",
+    "favorites": "المفضلة",
+    "myListings": "قوائمي",
+    "addListing": "إضافة قائمة"
+  },
+  "home": {
+    "hero": {
+      "title": "اكتشف أماكن مذهلة",
+      "subtitle": "اعثر على أفضل المطاعم والمقاهي والخدمات في منطقتك"
+    },
+    "categories": {
+      "title": "تصفح حسب الفئة"
+    },
+    "featured": {
+      "title": "القوائم المميزة"
+    }
+  },
+  "search": {
+    "placeholder": "ابحث عن الأماكن...",
+    "filters": "التصفية",
+    "category": "الفئة",
+    "price": "نطاق السعر",
+    "distance": "المسافة",
+    "sortBy": "ترتيب حسب",
+    "apply": "تطبيق الفلاتر",
+    "clear": "مسح الكل",
+    "results": "نتيجة"
+  },
+  "listing": {
+    "rating": "التقييم",
+    "reviews": "مراجعات",
+    "distance": "كم",
+    "viewDetails": "عرض التفاصيل",
+    "favorite": "حفظ في المفضلة",
+    "share": "مشاركة",
+    "contact": "اتصل",
+    "hours": "ساعات العمل",
+    "amenities": "المرافق",
+    "gallery": "المعرض",
+    "status": {
+      "pending": "قيد المراجعة",
+      "active": "نشط",
+      "rejected": "مرفوض"
+    },
+    "rejectionReason": "سبب الرفض"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "rememberMe": "تذكرني",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "backToSignIn": "العودة لتسجيل الدخول"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "overview": "نظرة عامة",
+    "listings": "القوائم",
+    "users": "المستخدمون",
+    "categories": "الفئات",
+    "addListing": "إضافة قائمة",
+    "editListing": "تعديل القائمة",
+    "deleteListing": "حذف القائمة",
+    "totalListings": "إجمالي القوائم",
+    "totalUsers": "إجمالي المستخدمين",
+    "totalCategories": "إجمالي الفئات"
+  },
+  "admin": {
+    "pendingTab": "قيد المراجعة",
+    "activeTab": "نشط",
+    "rejectedTab": "مرفوض",
+    "approve": "قبول",
+    "reject": "رفض",
+    "rejectReason": "سبب الرفض",
+    "enterReason": "أدخل سبب الرفض",
+    "approveConfirm": "هل أنت متأكد من قبول هذه القائمة؟",
+    "rejectConfirm": "هل أنت متأكد من رفض هذه القائمة؟"
+  },
+  "owner": {
+    "myListings": "قوائمي",
+    "addNew": "إضافة قائمة جديدة",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "noListings": "لا توجد قوائم بعد",
+    "createFirst": "أنشئ قائمتك الأولى للبدء"
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "تواصل معنا",
+    "name": "الاسم",
+    "message": "الرسالة",
+    "send": "إرسال الرسالة"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "close": "إغلاق",
+    "submit": "إرسال",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "view": "عرض",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "profile": {
+    "myFavorites": "مفضلاتي",
+    "visitedHistory": "تاريخ الزيارات",
+    "history": "السجل",
+    "noFavorites": "لا توجد مفضلات بعد",
+    "noHistory": "لا توجد أماكن تمت زيارتها بعد",
+    "visited": "تمت الزيارة",
+    "manageFavorites": "إدارة الأماكن المفضلة لديك",
+    "startSaving": "ابدأ الاستكشاف واحفظ أماكنك المفضلة هنا"
+  },
+  "role": {
+    "admin": "مدير",
+    "owner": "مالك",
+    "user": "مستخدم"
+  }
+}

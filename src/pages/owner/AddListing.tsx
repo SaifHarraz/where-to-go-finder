@@ -84,6 +84,8 @@ export default function AddListing() {
       image: data.image,
       rating: 0,
       review_count: 0,
+      is_open: true,
+      is_featured: false,
     });
 
     setIsLoading(false);

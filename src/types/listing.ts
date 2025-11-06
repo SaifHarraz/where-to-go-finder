@@ -37,6 +37,8 @@ export interface Listing {
   amenities?: string[];
   isOpen?: boolean;
   isFeatured?: boolean;
+  status?: 'pending' | 'active' | 'rejected';
+  rejectionReason?: string | null;
   createdAt: string;
 }
 
