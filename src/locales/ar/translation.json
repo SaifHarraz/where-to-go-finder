@@ -49,9 +49,16 @@
     "status": {
       "pending": "قيد المراجعة",
       "active": "نشط",
-      "rejected": "مرفوض"
+      "rejected": "مرفوض",
+      "title": "الحالة"
     },
-    "rejectionReason": "سبب الرفض"
+    "rejectionReason": "سبب الرفض",
+    "statusNotification": {
+      "title": "تم تحديث حالة القائمة",
+      "approved": "تمت الموافقة على قائمتك! ✅",
+      "rejected": "تم رفض قائمتك",
+      "pending": "قائمتك الآن قيد المراجعة"
+    }
   },
   "auth": {
     "signIn": "تسجيل الدخول",

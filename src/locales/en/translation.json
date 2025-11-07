@@ -49,9 +49,16 @@
     "status": {
       "pending": "Pending",
       "active": "Active",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "title": "Status"
     },
-    "rejectionReason": "Rejection Reason"
+    "rejectionReason": "Rejection Reason",
+    "statusNotification": {
+      "title": "Listing Status Updated",
+      "approved": "Your listing has been approved! ✅",
+      "rejected": "Your listing was rejected",
+      "pending": "Your listing is now pending review"
+    }
   },
   "auth": {
     "signIn": "Sign In",

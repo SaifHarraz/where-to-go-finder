@@ -10,6 +10,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -37,7 +38,7 @@ export default function MyListings() {
   const queryClient = useQueryClient();
 
   // Fetch user's listings
-  const { data: listings = [], isLoading } = useQuery({
+  const { data: listings = [], isLoading, refetch } = useQuery({
     queryKey: ['myListings', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -51,6 +52,45 @@ export default function MyListings() {
     },
     enabled: !!user?.id,
   });
+
+  // Real-time subscription for owner's listing status changes
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const channel = supabase
+      .channel('my-listing-status-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'listings',
+          filter: `owner_id=eq.${user.id}`
+        },
+        (payload: any) => {
+          // Show toast notification when status changes
+          if (payload.new.status !== payload.old.status) {
+            const statusMessages: Record<string, string> = {
+              active: t('listing.statusNotification.approved') || 'Your listing has been approved! ✅',
+              rejected: t('listing.statusNotification.rejected') || `Your listing was rejected: ${payload.new.rejection_reason || 'No reason provided'}`,
+              pending: t('listing.statusNotification.pending') || 'Your listing is now pending review'
+            };
+            
+            toast({
+              title: t('listing.statusNotification.title') || 'Listing Status Updated',
+              description: statusMessages[payload.new.status] || 'Status changed',
+              variant: payload.new.status === 'rejected' ? 'destructive' : 'default'
+            });
+          }
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, refetch, toast, t]);
 
   // Delete listing mutation
   const deleteMutation = useMutation({

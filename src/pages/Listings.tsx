@@ -1,19 +1,57 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SearchFilters } from "@/components/SearchFilters";
 import { ListingCard } from "@/components/ListingCard";
 import { useFilterStore } from "@/store/useFilterStore";
-import { listings } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Grid, List, Map } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { mapDatabaseListingToListing } from "@/utils/listingMapper";
 
 export default function Listings() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState("nearest");
   
   const { search, categories: selectedCategories, priceRange } = useFilterStore();
+
+  const { data: listings = [], refetch } = useQuery({
+    queryKey: ['active-listings'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return (data || []).map(mapDatabaseListingToListing);
+    }
+  });
+
+  // Real-time subscription for listing status changes
+  useEffect(() => {
+    const channel = supabase
+      .channel('listing-status-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'listings'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
 
   const filteredListings = useMemo(() => {
     let filtered = [...listings];
