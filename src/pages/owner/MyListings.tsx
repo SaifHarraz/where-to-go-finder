@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -126,7 +127,7 @@ export default function MyListings() {
                       <TableHead>Location</TableHead>
                       <TableHead>Price</TableHead>
                       <TableHead>Rating</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{t('listing.status.title') || 'Status'}</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -143,9 +144,21 @@ export default function MyListings() {
                         <TableCell>${listing.price}</TableCell>
                         <TableCell>{listing.rating} ★</TableCell>
                         <TableCell>
-                          <span className={`inline-flex rounded-full px-2 py-1 text-xs ${listing.is_open ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'}`}>
-                            {listing.is_open ? 'Open' : 'Closed'}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <Badge
+                              variant={
+                                listing.status === 'active' ? 'default' :
+                                listing.status === 'rejected' ? 'destructive' : 'secondary'
+                              }
+                            >
+                              {t(`listing.status.${listing.status || 'pending'}`)}
+                            </Badge>
+                            {listing.status === 'rejected' && listing.rejection_reason && (
+                              <span className="text-xs text-destructive">
+                                {t('listing.rejectionReason')}: {listing.rejection_reason}
+                              </span>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">

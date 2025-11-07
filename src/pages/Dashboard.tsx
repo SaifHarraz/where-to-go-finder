@@ -3,8 +3,22 @@ import { Footer } from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Plus, MapPin, Users, FolderOpen } from "lucide-react";
-import { listings, users, categories } from "@/data/mockData";
+import { Plus, MapPin, Users, FolderOpen, Check, X } from "lucide-react";
+import { users, categories } from "@/data/mockData";
+import { useTranslation } from "react-i18next";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -16,6 +30,75 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<any>(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [statusFilter, setStatusFilter] = useState<'pending' | 'active' | 'rejected'>('pending');
+
+  // Fetch listings by status
+  const { data: listings = [], isLoading } = useQuery({
+    queryKey: ['adminListings', statusFilter],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('status', statusFilter)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Approve listing mutation
+  const approveMutation = useMutation({
+    mutationFn: async (listingId: string) => {
+      const { error } = await supabase
+        .from('listings')
+        .update({ status: 'active', rejection_reason: null })
+        .eq('id', listingId);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminListings'] });
+      toast({
+        title: t('common.success') || 'Success',
+        description: 'Listing approved successfully',
+      });
+    },
+  });
+
+  // Reject listing mutation
+  const rejectMutation = useMutation({
+    mutationFn: async ({ listingId, reason }: { listingId: string; reason: string }) => {
+      const { error } = await supabase
+        .from('listings')
+        .update({ status: 'rejected', rejection_reason: reason })
+        .eq('id', listingId);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminListings'] });
+      setRejectDialogOpen(false);
+      setRejectionReason("");
+      toast({
+        title: t('common.success') || 'Success',
+        description: 'Listing rejected',
+      });
+    },
+  });
+
+  const handleReject = () => {
+    if (selectedListing && rejectionReason.trim()) {
+      rejectMutation.mutate({ listingId: selectedListing.id, reason: rejectionReason });
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -42,7 +125,7 @@ export default function Dashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">{listings.length}</div>
                 <p className="text-xs text-muted-foreground">
-                  {listings.filter((l) => l.isFeatured).length} featured
+                  {listings.filter((l) => l.is_featured).length} featured
                 </p>
               </CardContent>
             </Card>
@@ -75,62 +158,99 @@ export default function Dashboard() {
           {/* Tabs */}
           <Tabs defaultValue="listings" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="listings">Listings</TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="categories">Categories</TabsTrigger>
+              <TabsTrigger value="listings">{t('dashboard.listings')}</TabsTrigger>
+              <TabsTrigger value="users">{t('dashboard.users')}</TabsTrigger>
+              <TabsTrigger value="categories">{t('dashboard.categories')}</TabsTrigger>
             </TabsList>
 
             {/* Listings Tab */}
             <TabsContent value="listings">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle>Listings Management</CardTitle>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Listing
-                  </Button>
+                <CardHeader>
+                  <CardTitle>{t('dashboard.listings')}</CardTitle>
+                  <Tabs value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)} className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="pending">{t('admin.pendingTab')}</TabsTrigger>
+                      <TabsTrigger value="active">{t('admin.activeTab')}</TabsTrigger>
+                      <TabsTrigger value="rejected">{t('admin.rejectedTab')}</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Rating</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {listings.slice(0, 5).map((listing) => (
-                        <TableRow key={listing.id}>
-                          <TableCell className="font-medium">
-                            {listing.title}
-                          </TableCell>
-                          <TableCell>{listing.category}</TableCell>
-                          <TableCell>
-                            {listing.location.city}, {listing.location.state}
-                          </TableCell>
-                          <TableCell>${listing.price}</TableCell>
-                          <TableCell>{listing.rating} ★</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={listing.isOpen ? "default" : "secondary"}
-                            >
-                              {listing.isOpen ? "Open" : "Closed"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Button variant="ghost" size="sm">
-                              Edit
-                            </Button>
-                          </TableCell>
+                  {isLoading ? (
+                    <div className="flex justify-center py-8">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                    </div>
+                  ) : listings.length === 0 ? (
+                    <div className="py-8 text-center text-muted-foreground">
+                      <p>No {statusFilter} listings</p>
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{t('listing.title') || 'Title'}</TableHead>
+                          <TableHead>Category</TableHead>
+                          <TableHead>Location</TableHead>
+                          <TableHead>Owner</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {listings.map((listing) => (
+                          <TableRow key={listing.id}>
+                            <TableCell className="font-medium">{listing.title}</TableCell>
+                            <TableCell>{listing.category}</TableCell>
+                            <TableCell>{listing.city}, {listing.state}</TableCell>
+                            <TableCell>{listing.owner_id}</TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  listing.status === 'active' ? 'default' :
+                                  listing.status === 'rejected' ? 'destructive' : 'secondary'
+                                }
+                              >
+                                {t(`listing.status.${listing.status}`)}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {listing.status === 'pending' && (
+                                  <>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => approveMutation.mutate(listing.id)}
+                                    >
+                                      <Check className="h-4 w-4 text-success" />
+                                      {t('admin.approve')}
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => {
+                                        setSelectedListing(listing);
+                                        setRejectDialogOpen(true);
+                                      }}
+                                    >
+                                      <X className="h-4 w-4 text-destructive" />
+                                      {t('admin.reject')}
+                                    </Button>
+                                  </>
+                                )}
+                                {listing.status === 'rejected' && listing.rejection_reason && (
+                                  <span className="text-xs text-muted-foreground">
+                                    {listing.rejection_reason}
+                                  </span>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -227,6 +347,36 @@ export default function Dashboard() {
       </div>
 
       <Footer />
+
+      {/* Reject Dialog */}
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('admin.reject')}</DialogTitle>
+            <DialogDescription>
+              {t('admin.enterReason')}
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            placeholder={t('admin.rejectReason')}
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            rows={4}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleReject}
+              disabled={!rejectionReason.trim()}
+            >
+              {t('admin.reject')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
