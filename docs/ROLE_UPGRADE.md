@@ -161,14 +161,89 @@ This document describes the implementation of role-based dashboards, avatar menu
 - Proper RTL support from initial render
 - No flash of incorrect direction
 
+## Admin Workflow & Real-Time Features
+
+### Admin Dashboard Enhancements (`src/pages/Dashboard.tsx`)
+- **Listing Status Management**:
+  - Admins can approve or reject pending listings
+  - Status badges show: Pending (yellow), Active (green), Rejected (red)
+  - Reject action includes optional rejection reason
+  - Actions update listing status in real-time
+
+### Owner Listing Management (`src/pages/owner/MyListings.tsx`)
+- **Status Badges**: Visual indicators for listing status
+- **Real-Time Notifications**: 
+  - Toast notifications when listing status changes
+  - Notifications appear when admin approves/rejects listings
+  - Automatic page refresh on status updates
+- **Status-Based UI**:
+  - Pending: "Waiting for approval" message
+  - Active: Normal display with edit/delete actions
+  - Rejected: Shows rejection reason with resubmit option
+
+### Public Listings Filtering
+- **Home Page (`src/pages/Home.tsx`)**:
+  - Only displays active listings
+  - Filters out pending and rejected listings
+  - Real-time updates when listings become active
+
+- **Listings Page (`src/pages/Listings.tsx`)**:
+  - Only shows active listings
+  - Automatic refresh when new listings are approved
+  - Real-time subscription to listing changes
+
+### Real-Time Implementation
+- **Database Configuration**:
+  - Enabled `REPLICA IDENTITY FULL` on listings table
+  - Added listings table to `supabase_realtime` publication
+  - Supports real-time status change notifications
+
+- **Listing Mapper (`src/utils/listingMapper.ts`)**:
+  - Maps database snake_case fields to camelCase TypeScript types
+  - Ensures consistent data format across application
+  - Handles all listing properties including status
+
+### Testing Admin Workflow
+
+#### As Admin
+1. Navigate to Admin Dashboard
+2. Review pending listings
+3. Click "Approve" or "Reject" on a listing
+4. For rejection, optionally add a reason
+5. Verify status badge updates immediately
+6. Check owner receives real-time notification
+
+#### As Owner
+1. Create a new listing
+2. Verify status shows as "Pending"
+3. Wait for admin to approve/reject
+4. Receive toast notification when status changes
+5. If rejected, view rejection reason
+6. Edit and resubmit if needed
+
+#### Public Users
+1. Browse home page and listings page
+2. Verify only active listings are visible
+3. Confirm pending/rejected listings are hidden
+4. Test real-time updates when new listings are approved
+
+### Translations Added
+- **English (`src/locales/en/translation.json`)**:
+  - `listing.status.notification.approved`
+  - `listing.status.notification.rejected`
+  - `listing.status.notification.changed`
+
+- **Arabic (`src/locales/ar/translation.json`)**:
+  - Status notification messages in Arabic
+  - RTL-compatible notification display
+
 ## Known Limitations
-- Mock data used for favorites and history (no backend persistence yet)
 - Avatar URLs use Dicebear placeholders
 - Role changes require re-login to take effect
 
 ## Future Enhancements
-- Backend integration for favorites and history
+- Email notifications for status changes
+- Bulk approval/rejection of listings
+- Advanced filtering for admin dashboard
 - Avatar upload functionality
-- Real-time role updates
 - Advanced profile editing
-- Notification system for activity
